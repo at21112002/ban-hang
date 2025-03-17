@@ -1,0 +1,72 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.content {
+    width: 50%;
+    margin-left: 31%;
+    margin-top: 90px;
+    padding: 20px;
+    background: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Form */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+input, textarea, select {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+/* Size Container */
+#size-container {
+    max-height: 150px;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+#size-container::-webkit-scrollbar {
+    display: none;
+}
+
+/* Buttons */
+button {
+    padding: 8px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+button[type="submit"] {
+    background: #007bff;
+    color: white;
+}
+button[type="submit"]:hover {
+    background: #0056b3;
+}
+.remove-size {
+    background: #dc3545;
+    color: white;
+}
+.remove-size:hover {
+    background: #c82333;
+}
+
+/* Size Items */
+.size-item {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 5px;
+}

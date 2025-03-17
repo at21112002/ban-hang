@@ -1,0 +1,91 @@
+<!-- views/partials/header.ejs -->
+
+<header>
+    <nav>
+        <ul>
+        <% if (session.user) { %>
+            
+            
+            <% if (session.user.quyen === "user") { %>
+                <li><a href="/">Trang chủ</a></li>
+
+                <li class="dropdown">
+                    <a href="/products">Sản phẩm</a>
+                    <ul class="dropdown-menu">
+                        <% if (categories && categories.length > 0) { %>
+                            <% categories.forEach(category => { %>
+                                <li><a href="/category/<%= category.idDM %>"><%= category.name %></a></li>
+                            <% }) %>
+                        <% } else { %>
+                            <li><a href="#">Không có danh mục</a></li>
+                        <% } %>
+                    </ul>
+                </li>
+
+                <li><a href="/blog">Blog</a></li>
+
+                <li><a href="/about">Giới thiệu</a></li>
+                
+            <% } %>
+            <% if (session.user.quyen === "admin") { %>
+                <a href="/admin">Quản trị</a>
+            <% } %>
+
+            <li class="dropdown">
+                <a href="">Xin chào, <%= session.user.email %>!</a>
+                <ul class="dropdown-menu">                    
+                    <li><a href="/user-details">Thông tin người dùng</a></li> 
+                    <li><a href="/">Đơn hàng của người dùng</a></li>                             
+                </ul>
+            </li>
+
+            <li><a href="/logout">Đăng xuất</a></li>
+
+            <% if (session.user.quyen === "user") { %>
+                
+                <li><a href="/cart">Giỏ hàng</a></li>
+            <% } %>
+            <form action="/search" method="GET" class="search-form">
+                <input type="text" name="q" placeholder="Tìm kiếm sản phẩm..." required />
+                <button type="submit">Tìm kiếm</button>
+              </form>
+              
+        <% } else { %>
+
+            <li><a href="/">Trang chủ</a></li>
+                
+                <li class="dropdown">
+                    <a href="/products">Sản phẩm</a>
+                    <ul class="dropdown-menu">
+                        <% if (categories && categories.length > 0) { %>
+                            <% categories.forEach(category => { %>
+                                <li><a href="/category/<%= category.idDM %>"><%= category.name %></a></li>
+                            <% }) %>
+                        <% } else { %>
+                            <li><a href="#">Không có danh mục</a></li>
+                        <% } %>
+                    </ul>
+                </li>
+                
+                <li><a href="/blog">Blog</a></li>
+                <li><a href="/about">Giới thiệu</a></li>
+                <li class="dropdown">
+                    <a href="/login">Đăng nhập</a>
+                    <ul class="dropdown-menu">                    
+                        <li><a href="/register">Đăng ký</a></li>
+                                                
+                    </ul>
+                </li>
+                
+                <li><a href="/cart">Giỏ hàng</a></li>
+                <form action="/search" method="GET" class="search-form">
+                    <input type="text" name="q" placeholder="Tìm kiếm sản phẩm..." required />
+                    <button type="submit">Tìm kiếm</button>
+                  </form>
+                  
+        <% } %>
+        </ul>
+    </nav>
+    
+</header>
+

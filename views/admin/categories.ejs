@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog - Cửa hàng</title>
+    <link rel="stylesheet" href="/css/admin/categories.css">
+    <link rel="stylesheet" href="/css/headeradmin.css">
+</head>
+<body>
+    <%- include('../partialsadmin/headeradmin') %>
+
+
+
+
+    <main>
+        <div class="content">
+            <div class="sales-female">
+                <h2>Quản lý Danh Mục</h2>
+<br>
+                <!-- Form thêm danh mục -->
+                <form action="/admin/categories/add"  method="POST">
+                    <input type="text" name="name" placeholder="Tên danh mục" required>
+                    <button type="submit" onclick="return confirm('Bạn sẽ thêm danh mục?')">Thêm</button>
+                </form>
+
+                <!-- Bảng danh sách danh mục -->
+                <table border="1">
+                    <tr>
+                        <th>ID</th>
+                        <th>Tên Danh Mục</th>
+                        <th>Hành động</th>
+                    </tr>
+                    <% categories.forEach(category => { %>
+                    <tr>
+                        <td><%= category.idDM %></td>
+                        <td><%= category.name %></td>
+                        <td>
+                            <form action="/admin/categories/update" method="POST">
+                                <input type="hidden" name="id" value="<%= category.idDM %>">
+                                <input type="text" name="name" value="<%= category.name %>">
+                                <button type="submit" onclick="return confirm('Bạn có chắc sửa tên danh mục?')">Sửa</button>
+                            </form>                            
+                            <a href="/admin/categories/delete/<%= category.idDM %>" onclick="return confirm('Bạn có chắc muốn xóa?')">Xóa</a>
+                        </td>
+                    </tr>
+                    <% }) %>
+                </table>
+
+            </div>
+        </div>
+    </main>
+</body>
+</html>

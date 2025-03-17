@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog - Cửa hàng</title>
+    <link rel="stylesheet" href="/css/admin/blogsadmin.css">
+    <link rel="stylesheet" href="/css/headeradmin.css">
+</head>
+<body>
+    <%- include('../partialsadmin/headeradmin') %>
+
+
+
+
+    <main>
+        <div class="content">
+            <div class="sales-female">
+                <h2>Quản lý Blog</h2>
+                <a href="/admin/addBlog">Thêm Blog</a>
+                <table border="1">
+                    <tr>
+                        <th>ID</th>
+                        <th>Tiêu đề</th>
+                        <th>Sản phẩm</th>
+                        <th>Danh mục</th>
+                        <th>Ngày tạo</th>
+                        <th>Hành động</th>
+                    </tr>
+                    <% blogs.forEach(blog => { %>
+                    <tr>
+                        <td><%= blog.idBlog %></td>
+                        <td><%= blog.title %></td>
+                        <td><%= blog.product_name ? blog.product_name : "Không có" %></td>
+                        <td><%= blog.category_name ? blog.category_name : "Không có" %></td>
+                        <td><%= blog.created_at %></td>
+                        <td>
+                            <a href="/admin/editBlog/edit/<%= blog.idBlog %>">Sửa</a>
+                            <a href="/admin/blogsadmin/delete/<%= blog.idBlog %>" onclick="return confirm('Xóa blog này?')">Xóa</a>
+                        </td>
+                    </tr>
+                    <% }) %>
+                </table>
+
+            </div>
+        </div>
+    </main>
+</body>
+</html>

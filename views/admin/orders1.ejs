@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Danh sách Đơn hàng</title>
+    <link rel="stylesheet" href="/css/admin/orders1.css">
+    <link rel="stylesheet" href="/css/headeradmin.css">
+</head>
+<body>
+    <%- include('../partialsadmin/headeradmin') %>
+
+    <main>
+        <div class="content">
+            <h1>Danh sách tất cả đơn hàng</h1>
+            <br>
+            <div class="sales-female">
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Tên Người Dùng</th>
+                            <th>Tổng Tiền</th>
+                            <th>Phương Thức Thanh Toán</th>
+                            <th>Trạng Thái Đơn Hàng</th>
+                            <th>Ngày Đặt</th>
+                            <th>Người dùng sát nhận</th>
+                            <th>Hành Động</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% orders.forEach(order => { %>
+                            <tr>
+                                <td><%= order.id %></td>
+                                <td><%= order.tenusers %></td>
+                                <td><%= order.total_price %></td>
+                                <td><%= order.payment_method %></td>
+                                
+                                <td>
+                                    <select id="status-<%= order.id %>" <%= (order.order_status === 'Đơn hàng đã được giao' || order.order_status === 'Khách hàng không nhận hàng') ? 'disabled' : '' %>>
+                                        <option value="Đã tạo đơn hàng" <%= order.order_status === 'Đã tạo đơn hàng' ? 'selected' : '' %>>Đã tạo đơn hàng</option>
+                                        <option value="Đơn hàng đang được giao" <%= order.order_status === 'Đơn hàng đang được giao' ? 'selected' : '' %>>Đơn hàng đang được giao</option>
+                                        <option value="Đơn hàng đã được giao" <%= order.order_status === 'Đơn hàng đã được giao' ? 'selected' : '' %>>Đơn hàng đã được giao</option>
+                                        <option value="Khách hàng không nhận hàng" <%= order.order_status === 'Khách hàng không nhận hàng' ? 'selected' : '' %>>Khách hàng không nhận hàng</option>
+                                    </select>
+                                </td>
+                                <td><%= order.order_date %></td>
+                                <td><%= order.user_confirmation %></td>
+                                <td>
+                                    <% if (order.order_status === 'Đơn hàng đã được giao' && order.user_confirmation === 'Đã nhận') { %>
+                                        ✅
+                                    <% } else if (order.order_status === 'Đơn hàng đã được giao' && order.user_confirmation === 'Chưa nhận') { %>
+                                        🔄
+                                    <% } else if (order.order_status === 'Khách hàng không nhận hàng' && order.user_confirmation === 'Chưa nhận') { %>
+                                        ❌
+                                    <% } else { %>
+                                        <button onclick="updateOrderStatus('<%= order.id %>')">Cập nhật</button>
+                                    <% } %>
+                                    <a href="/orders1/<%= order.id %>" class="btn-detail">Xem chi tiết</a>
+                                </td>
+                                
+                                
+                            </tr>
+                        <% }) %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function updateOrderStatus(orderId) {
+            const newStatus = document.getElementById(`status-${orderId}`).value;
+            fetch(`/orders1/${orderId}/updateStatus`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ order_status: newStatus })
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert('Cập nhật thành công!');
+                    location.reload();
+                } else {
+                    alert('Có lỗi xảy ra, vui lòng thử lại.');
+                }
+            })
+            .catch(error => console.error('Lỗi:', error));
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,65 @@
+NGUYEN VAN A
+9704000000000018
+03/07
+OTP
+const axios = require('axios');
+const crypto = require('crypto');
+
+const execPostRequest = async (url, data) => {
+  try {
+    const response = await axios.post(url, data, {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      timeout: 5000
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error:', error.message);
+    return null;
+  }
+};
+
+const endpoint = "https://test-payment.momo.vn/v2/gateway/api/create";
+const partnerCode = 'MOMOBKUN20180529';
+const accessKey = 'klm05TvNBzhg7h7j';
+const serectkey = 'at67qH6mk8w5Y1nAyMoYKMWACiEi2bsa';
+const orderInfo = "Thanh toán qua MoMo";
+const amount = 10000;
+const ipnUrl = "http://localhost/DOAN3/order/returnPayment/";
+const redirectUrl = "http://localhost/DOAN3/order/returnPayment/";
+const requestId = `${Date.now()}`;
+const orderId = `DH${Date.now()}`;
+const requestType = "payWithATM";
+const extraData = "";
+
+// Generate signature
+const rawHash = `accessKey=${accessKey}&amount=${amount}&extraData=${extraData}&ipnUrl=${ipnUrl}&orderId=${orderId}&orderInfo=${orderInfo}&partnerCode=${partnerCode}&redirectUrl=${redirectUrl}&requestId=${requestId}&requestType=${requestType}`;
+const signature = crypto.createHmac('sha256', serectkey).update(rawHash).digest('hex');
+
+const data = {
+  partnerCode,
+  partnerName: "Test",
+  storeId: "MomoTestStore",
+  requestId,
+  amount,
+  orderId,
+  orderInfo,
+  redirectUrl,
+  ipnUrl,
+  lang: 'vi',
+  extraData,
+  requestType,
+  signature
+};
+
+(async () => {
+  const result = await execPostRequest(endpoint, data);
+  if (result && result.payUrl) {
+    console.log('Redirect to:', result.payUrl);
+  } else {
+    console.log('Lỗi:', result?.message || 'Không có thông tin chi tiết.');
+    console.log(result);
+  }
+})();
+http://localhost:3000/cart?partnerCode=MOMOBKUN20180529&orderId=DH1741810604835&requestId=1741810604835&amount=27775&orderInfo=Thanh+to%C3%A1n+qua+MoMo&orderType=momo_wallet&transId=4365661971&resultCode=0&message=Successful.&payType=napas&responseTime=1741810649835&extraData=&signature=a59d2354efca331feca4d4e01d96f3b5d5c5093b378d3ba093772c39c0241516

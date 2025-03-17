@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog - Cửa hàng</title>
+    <link rel="stylesheet" href="/css/admin/addDiscount.css">
+    <link rel="stylesheet" href="/css/headeradmin.css">
+</head>
+<body>
+    <%- include('../partialsadmin/headeradmin') %>
+
+    <main>
+        <div class="content">
+            <div class="sales-female">
+                <h2>Chỉnh sửa Mã Giảm Giá</h2>
+                <form action="/admin/editDiscount/edit/<%= discount.id %>" method="POST">
+                    <label>Mã giảm giá:</label>
+                    <input type="text" name="code" value="<%= discount.code %>" required>
+                    <label>Giảm giá (%):</label>
+                    <input type="number" name="discount_percentage" min="1" max="100" value="<%= discount.discount_percentage %>" required>
+                    <label>Ngày hết hạn:</label>
+                    <input type="datetime-local" name="expiration_date" value="<%= discount.expiration_date %>" required>
+                    <label>Số lượng:</label>
+                    <input type="number" name="quantitydiscount" min="1" value="<%= discount.quantitydiscount %>" required>
+                    <button type="submit">Cập nhật</button>
+                </form>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

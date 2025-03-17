@@ -1,0 +1,126 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f4f4f4;
+}
+
+/* Main Container */
+main {
+    width: 80%;
+    margin-left: 16%;
+    margin-top: 100px;
+    padding: 20px;
+    background: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Content */
+.content {
+    padding: 20px;
+}
+/* Container with Hidden Scroll */
+.sales-female {
+    max-height: 400px; /* Giới hạn chiều cao */
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    -ms-overflow-style: none;  /* Ẩn trên IE, Edge */
+    scrollbar-width: none;     /* Ẩn trên Firefox */
+}
+
+/* Ẩn trên Chrome, Safari */
+.sales-female::-webkit-scrollbar {
+    display: none;
+}
+
+/* Heading */
+h1 {
+    text-align: center;
+    color: #333;
+}
+
+/* Table */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background: #fff;
+    border-radius: 5px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+table th, table td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: center;
+    font-size: 14px;
+}
+
+table th {
+    background: #007bff;
+    color: white;
+}
+
+/* Select */
+select {
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background: #fff;
+}
+
+/* Buttons */
+button {
+    padding: 6px 12px;
+    background: #28a745;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.2s;
+    margin: 0 5px;
+}
+
+button:hover {
+    background: #218838;
+}
+
+/* Detail Button */
+a.btn-detail {
+    display: inline-block;
+    padding: 6px 12px;
+    background: #007bff;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: background 0.2s;
+    margin: 0 5px;
+}
+
+a.btn-detail:hover {
+    background: #0056b3;
+}
+
+/* Emoji Icons */
+td {
+    font-size: 16px;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    main {
+        padding: 10px;
+    }
+
+    table th, table td {
+        padding: 8px;
+        font-size: 12px;
+    }
+
+    button, a.btn-detail {
+        padding: 5px 8px;
+        font-size: 12px;
+    }
+}

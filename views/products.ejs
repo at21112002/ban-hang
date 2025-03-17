@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sản phẩm - Cửa hàng</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/product.css">
+</head>
+<body>
+    <!-- Include header -->
+    <%- include('partials/header') %>
+    <div class="marquee">
+        <h1>DAY LA DANH SACH SAN PHAM, CHUC QUY KHACH CO TRAI NGHIEM MUA HANG VUI VE VA TIM DUOC SAN PHAM PHU HOP VOI MINH</h1>
+    </div>
+    <main>
+        <div class="product-list">
+            <% products.forEach(product => { %>
+                <div class="product-item">
+                    <img src="<%= product.image %>" alt="<%= product.name %>" class="product-img">
+
+                    <h3 class="product-name"><%= product.name %></h3>
+
+                    <p>Giá: <%= product.price %> VND</p>
+                    <a href="/product/<%= product.idSP %>">Xem chi tiết</a>
+                    <!-- Chọn size -->
+                    <p><strong> Size:</strong></p>
+                    <div class="size-options">
+                        <% product.sizes.forEach((size, index) => { %>
+                            <button 
+                                class="size-btn" 
+                                data-product-id="<%= product.idSP %>"
+                                data-size="<%= size.size %>"
+                                data-quantity="<%= size.quantity %>"
+                                <%= size.quantity === 0 ? 'disabled' : '' %>
+                            >
+                                <%= size.size %> (<%= size.quantity === 0 ? 'Hết hàng' : 'Còn ' + size.quantity %>)
+                            </button>
+                        <% }) %>
+                        
+                    </div>
+        
+                    <!-- Chọn số lượng -->
+                    <p><strong> Số lượng:</strong></p>
+                    <input 
+                        type="number" 
+                        class="quantity-input" 
+                        data-product-id="<%= product.idSP %>" 
+                        min="1" 
+                        max="0" 
+                        value="1"
+                        disabled
+                    >
+        
+                    
+                        <input type="hidden" name="idSP" value="<%= product.idSP %>">
+                        <input type="hidden" name="size" class="selected-size" data-product-id="<%= product.idSP %>">
+                        <input type="hidden" name="quantity" class="selected-quantity" data-product-id="<%= product.idSP %>">
+                        <button type="submit" class="add-to-cart-btn" data-product-id="<%= product.idSP %>" disabled>Thêm vào giỏ hàng</button>
+
+                    
+                </div>
+            <% }) %>
+        </div>
+        
+    
+        <div class="pagination">
+            <% if (currentPage > 1) { %>
+                <a href="?page=<%= currentPage - 1 %>&limit=4">Trước</a>
+            <% } %>
+        
+            <% for (let i = 1; i <= totalPages; i++) { %>
+                <a href="?page=<%= i %>&limit=4" class="<%= i === currentPage ? 'active' : '' %>"><%= i %></a>
+            <% } %>
+        
+            <% if (currentPage < totalPages) { %>
+                <a href="?page=<%= currentPage + 1 %>&limit=4">Tiếp</a>
+            <% } %>
+        </div>
+        
+    </main>
+    
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            document.querySelectorAll(".size-btn").forEach(button => {
+                button.addEventListener("click", function () {
+                    const productId = this.dataset.productId;
+                    const selectedSize = this.dataset.size;
+                    const maxQuantity = this.dataset.quantity;
+    
+                    // Bỏ chọn tất cả nút size trước đó
+                    document.querySelectorAll(`.size-btn[data-product-id='${productId}']`).forEach(btn => {
+                        btn.classList.remove("selected");
+                    });
+    
+                    // Đánh dấu size đã chọn
+                    this.classList.add("selected");
+    
+                    // Cập nhật input số lượng
+                    const quantityInput = document.querySelector(`.quantity-input[data-product-id='${productId}']`);
+                    quantityInput.max = maxQuantity;
+                    quantityInput.value = maxQuantity > 0 ? 1 : 0;
+                    quantityInput.disabled = maxQuantity == 0;
+    
+                    // Cập nhật input hidden
+                    document.querySelector(`.selected-size[data-product-id='${productId}']`).value = selectedSize;
+                    document.querySelector(`.selected-quantity[data-product-id='${productId}']`).value = quantityInput.value;
+    
+                    // Kích hoạt nút "Thêm vào giỏ hàng"
+                    const productItem = this.closest(".product-item"); // Tìm div cha chứa sản phẩm
+                    const addToCartBtn = productItem.querySelector(".add-to-cart-btn"); // Tìm nút trong sản phẩm
+                    if (addToCartBtn) {
+                        addToCartBtn.disabled = maxQuantity == 0; // Chỉ cập nhật nếu tìm thấy nút
+                    } else {
+                        console.error("Không tìm thấy nút Thêm vào giỏ hàng cho sản phẩm:", productId);
+                    }
+
+                    addToCartBtn.disabled = maxQuantity == 0;
+                });
+            });
+    
+            // Gọi API khi bấm "Thêm vào giỏ hàng"
+            document.addEventListener("click", async function (event) {
+            if (event.target.classList.contains("add-to-cart-btn")) {
+                const productItem = event.target.closest(".product-item");
+
+                if (!productItem) {
+                    console.error("❌ Không tìm thấy product-item!");
+                    return;
+                }
+
+                const productId = productItem.querySelector("input[name='idSP']").value;
+
+                const sizeElement = productItem.querySelector(".selected-size");
+                if (!sizeElement || !sizeElement.value) {
+                    alert("⚠️ Vui lòng chọn size trước khi thêm vào giỏ hàng!");
+                    return;
+                }
+                const selectedSize = sizeElement.value;
+
+                const selectedQuantity = productItem.querySelector(".quantity-input").value;
+
+                // Lấy hình ảnh sản phẩm
+                const imgElement = productItem.querySelector("img");
+                const productImage = imgElement ? imgElement.src : "";
+
+                // Lấy tên sản phẩm
+                const nameElement = productItem.querySelector(".product-name");
+                const productName = nameElement ? nameElement.textContent : "Không có tên";
+
+                // Lấy giá sản phẩm
+                const priceElement = productItem.querySelector("p");
+                const productPrice = priceElement ? parseFloat(priceElement.textContent.replace(/[^0-9.-]+/g, "")) : 0;
+
+                if (!selectedSize || selectedQuantity <= 0) {
+                    alert("⚠️ Vui lòng chọn size và số lượng hợp lệ!");
+                    return;
+                }
+
+                const data = {
+                    idSP: productId,
+                    size: selectedSize,
+                    quantity: selectedQuantity,
+                    image: productImage,
+                    name: productName,
+                    price: productPrice
+                };
+
+                console.log("📤 Gửi dữ liệu lên API:", data);
+
+                try {
+                    const response = await fetch("/api/cart/add", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify(data)
+                    });
+
+                    const result = await response.json();
+                    console.log("📩 Kết quả API:", result);
+
+                    if (response.ok) {
+                        alert("🛒 Sản phẩm đã được thêm vào giỏ hàng!");
+                    } else {
+                        alert("⚠️ Lỗi: " + result.error);
+                    }
+                } catch (error) {
+                    console.error("❌ Lỗi khi gọi API:", error);
+                }
+            }
+        });
+
+
+    
+            // Cập nhật số lượng khi thay đổi input
+            document.querySelectorAll(".quantity-input").forEach(input => {
+                input.addEventListener("input", function () {
+                    const productId = this.dataset.productId;
+                    document.querySelector(`.selected-quantity[data-product-id='${productId}']`).value = this.value;
+                });
+            });
+        });
+    </script>
+    
+
+    
+    
+    
+    
+
+    <!-- Include footer -->
+    <%- include('partials/footer') %>
+</body>
+</html>
+

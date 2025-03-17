@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trang chủ - Cửa hàng</title>
+    <link rel="stylesheet" href="/css/home.css">
+    <link rel="stylesheet" href="/css/product.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <%- include('partials/header', { categories: categories }) %>
+
+
+    <!-- Main content -->
+    <main>
+        <div class= "content">
+            <h2> CHÀO MỪNG!</h2>
+            <h3> Đến với trang wed Shop của chúng tôi </h3> 
+           
+            <pre> Rất hân hạnh được phục vụ quý khách!</pre>
+            
+            <div class ="icon">
+             <i class="fa-brands fa-facebook"></i> 
+             <i class="fa-brands fa-instagram"></i> 
+             <i class="fa-brands fa-twitter"></i> 
+             <i class="fa-brands fa-github"></i> 
+            </div>
+        </div>
+    </main>
+    <div class="gioithieu">
+        <div>
+            <img src="/image/pexels-obviouslyarthur-1102777.jpg" alt="">
+            <br>
+            <p>san pham cua chung toi <br>dem lai cho ban su <br>thoai mat</p>
+        </div>
+        <div>
+            <p>san pham <br>cua chung toi dem lai cho ban su <br>thoai mat</p>
+            <br>
+            <img src="/image/pexels-melvin-buezo-1253763-2529148.jpg" alt="">
+            
+        </div>
+        <div>
+            <img src="/image/pexels-photo-1476209.webp" alt="">
+            <br>
+            <p>san pham cua chung toi<br> dem lai cho ban su <br>thoai mat</p>
+        </div>
+    </div>
+    <div class="listsanpham">
+        <h1>cac san pham</h1>
+        <div class="sanpham-container">
+          
+          <div class="sanpham">
+            <img src="/image/124971e457.webp" alt="">
+            <p>ten san pham</p>
+            <p>gia san pham</p>
+            <button>mua</button>
+          </div>
+          
+        </div>
+
+    </div>
+
+      <div class="marquee">
+        <h1>CHUC QUY KHACH CO TRAI NGHIEM MUA HANG VUI VE VA TIM DUOC SAN PHAM PHU HOP VOI MINH</h1>
+      </div>
+      
+      <div>
+        <div class="product-list">
+            <% products.forEach(product => { %>
+                <div class="product-item">
+                    <img src="<%= product.image %>" alt="<%= product.name %>" class="product-img">
+
+                    <h3 class="product-name"><%= product.name %></h3>
+
+                    <p>Giá: <%= product.price %> VND</p>
+                    <a href="/product/<%= product.idSP %>">Xem chi tiết</a>
+                    <!-- Chọn size -->
+                    <p><strong> Size:</strong></p>
+                    <div class="size-options">
+                        <% product.sizes.forEach((size, index) => { %>
+                            <button 
+                                class="size-btn" 
+                                data-product-id="<%= product.idSP %>"
+                                data-size="<%= size.size %>"
+                                data-quantity="<%= size.quantity %>"
+                                <%= size.quantity === 0 ? 'disabled' : '' %>
+                            >
+                                <%= size.size %> (<%= size.quantity === 0 ? 'Hết hàng' : 'Còn ' + size.quantity %>)
+                            </button>
+                        <% }) %>
+                        
+                    </div>
+        
+                    <!-- Chọn số lượng -->
+                    <p><strong> Số lượng:</strong></p>
+                    <input 
+                        type="number" 
+                        class="quantity-input" 
+                        data-product-id="<%= product.idSP %>" 
+                        min="1" 
+                        max="0" 
+                        value="1"
+                        disabled
+                    >
+        
+                    
+                        <input type="hidden" name="idSP" value="<%= product.idSP %>">
+                        <input type="hidden" name="size" class="selected-size" data-product-id="<%= product.idSP %>">
+                        <input type="hidden" name="quantity" class="selected-quantity" data-product-id="<%= product.idSP %>">
+                        <button type="submit" class="add-to-cart-btn" data-product-id="<%= product.idSP %>" disabled>Thêm vào giỏ hàng</button>
+
+                    
+                </div>
+            <% }) %>
+        </div>
+      </div>
+      
+
+      
+
+    <!-- Footer -->
+    <%- include('partials/footer') %>
+    <script>
+        const container = document.querySelector('.sanpham-container');
+        let scrollInterval;
+        
+        // Tự động cuộn
+        function startAutoScroll() {
+          scrollInterval = setInterval(() => {
+            container.scrollLeft += 1;
+            if (container.scrollLeft + container.clientWidth >= container.scrollWidth) {
+              container.scrollLeft = 0; // Cuộn lại từ đầu khi hết sản phẩm
+            }
+          }, 1); // Tốc độ cuộn
+        }
+      
+        // Dừng khi rê chuột vào
+        container.addEventListener('mouseenter', () => clearInterval(scrollInterval));
+        
+        // Tiếp tục khi rời chuột ra ngoài
+        container.addEventListener('mouseleave', startAutoScroll);
+        
+        // Bắt đầu khi trang load
+        window.onload = startAutoScroll;
+      </script>
+      
+</body>
+</html>

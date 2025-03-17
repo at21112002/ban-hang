@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sản phẩm - Cửa hàng</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/productdetai.css">
+</head>
+<body>
+    <!-- Include header -->
+    <%- include('partials/header') %>
+
+    <main class="product-container">
+        <div class="product-info">
+            <h2>THÔNG TIN</h2>
+            <ul>
+                <li><%= product.description %></li>
+            </ul>
+        </div>
+        
+        <div class="product-image-container">
+            <img class="product-image" src="<%= product.image %>" alt="<%= product.name %>">
+        </div>
+        
+        <div class="product-details">
+            <h1 class="product-title"><%= product.name %></h1>
+            <p class="product-price"><%= product.price %> VNĐ</p>
+            <p class="product-status">Tình trạng: <%= product.totalQuantity > 0 ? "Còn hàng" : "Hết hàng" %></p>
+            
+            <h3>Chọn Size</h3>
+            <div class="size-options">
+                <% product.sizes.forEach(size => { %>
+                    <button class="size-btn" data-size="<%= size.size %>" data-quantity="<%= size.quantity %>" <%= size.quantity === 0 ? 'disabled' : '' %>><%= size.size %></button>
+                <% }); %>
+            </div>
+        
+            <p><strong>Số lượng còn lại: <span id="quantityDisplay"><%= product.totalQuantity %></span></strong></p>
+        
+            <div class="quantity-selector">
+                <button id="decreaseBtn">-</button>
+                <input type="number" id="quantityInput" value="1" min="1">
+                <button id="increaseBtn">+</button>
+            </div>
+        
+            <button id="addToCart" class="btn btn-light" disabled>Thêm vào giỏ</button>
+            <button id="buyNow" class="btn btn-dark">Mua ngay</button>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            let selectedSize = null;
+            let maxQuantity = 0;
+
+            // Bắt sự kiện chọn size
+            document.querySelectorAll(".size-btn").forEach(button => {
+                button.addEventListener("click", function () {
+                    // Xóa trạng thái chọn trước đó
+                    document.querySelectorAll(".size-btn").forEach(btn => btn.classList.remove("selected"));
+                    this.classList.add("selected");
+
+                    selectedSize = this.dataset.size;
+                    maxQuantity = parseInt(this.dataset.quantity, 10);
+                    document.getElementById("quantityDisplay").textContent = maxQuantity;
+                    const quantityInput = document.getElementById("quantityInput");
+                    quantityInput.value = maxQuantity > 0 ? 1 : 0;
+                    quantityInput.max = maxQuantity;
+                    quantityInput.disabled = maxQuantity === 0;
+
+                    // Kích hoạt nút thêm vào giỏ
+                    const addToCartBtn = document.getElementById("addToCart");
+                    addToCartBtn.disabled = maxQuantity === 0;
+                });
+            });
+
+            // Điều chỉnh số lượng
+            const quantityInput = document.getElementById("quantityInput");
+            document.getElementById("decreaseBtn").addEventListener("click", () => {
+                if (quantityInput.value > 1) quantityInput.value--;
+            });
+            document.getElementById("increaseBtn").addEventListener("click", () => {
+                if (quantityInput.value < maxQuantity) quantityInput.value++;
+            });
+
+            // Thêm vào giỏ hàng
+            document.getElementById("addToCart").addEventListener("click", async () => {
+                if (!selectedSize) {
+                    alert("Vui lòng chọn size trước khi thêm vào giỏ hàng!");
+                    return;
+                }
+
+                const data = {
+                    idSP: "<%= product.idSP %>",
+                    size: selectedSize,
+                    quantity: quantityInput.value,
+                    image: "<%= product.image %>",
+                    name: "<%= product.name %>",
+                    price: "<%= product.price %>"
+                };
+
+                try {
+                    const response = await fetch("/api/cart/add", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify(data)
+                    });
+
+                    const result = await response.json();
+                    if (response.ok) {
+                        alert("🛒 Sản phẩm đã được thêm vào giỏ hàng!");
+                    } else {
+                        alert("⚠️ Lỗi: " + result.error);
+                    }
+                } catch (error) {
+                    console.error("❌ Lỗi khi gọi API:", error);
+                }
+            });
+        });
+    </script>
+
+    <!-- Include footer -->
+    <%- include('partials/footer') %>
+</body>
+</html>

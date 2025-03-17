@@ -1,0 +1,63 @@
+/* Tổng thể */
+main {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+}
+
+/* Tiêu đề */
+main h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 24px;
+    color: #333;
+}
+
+/* Thông tin chi tiết */
+main p {
+    margin: 10px 0;
+    font-size: 16px;
+    line-height: 1.5;
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid #f0f0f0;
+    padding-bottom: 5px;
+}
+
+/* Nhấn mạnh */
+main strong {
+    color: #000;
+}
+
+/* Liên kết */
+main a {
+    text-decoration: none;
+    color: #007bff;
+    font-weight: bold;
+    transition: color 0.2s;
+}
+
+main a:hover {
+    color: #0056b3;
+    text-decoration: underline;
+}
+.user-action-btn {
+    background-color: #000;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    margin: 10px 0;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.2s;
+}
+
+.user-action-btn:hover {
+    color: red;
+}

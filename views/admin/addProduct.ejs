@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog - Cửa hàng</title>
+    <link rel="stylesheet" href="/css/admin/addProduct.css">
+    <link rel="stylesheet" href="/css/headeradmin.css">
+</head>
+<body>
+    <%- include('../partialsadmin/headeradmin') %>
+
+
+
+
+    <main>
+        <div class="content">
+            <div class="sales-female">
+                <h2>Thêm sản phẩm</h2>
+                <form action="/admin/productsadmin/add" method="POST" enctype="multipart/form-data" onsubmit="prepareSizes()">
+                    <label>Tên sản phẩm:</label>
+                    <input type="text" name="name" required />
+    
+                    <label>Giá:</label>
+                    <input type="number" name="price" required />
+    
+                    <label>Mô tả:</label>
+                    <textarea name="description"></textarea>
+    
+                    <label>Ảnh:</label>
+                    <input type="file" name="image" />
+    
+                    <label>Danh mục:</label>
+                    <select name="idDM">
+                        <% categories.forEach(category => { %>
+                            <option value="<%= category.idDM %>"><%= category.name %></option>
+                        <% }); %>
+                    </select>
+    
+                    <label>Size và số lượng:</label>
+                    <div id="size-container">
+                        <div class="size-item">
+                            <input type="text" placeholder="Size (S, M, L...)" class="size-input" />
+                            <input type="number" placeholder="Số lượng" class="quantity-input" />
+                            <button type="button" onclick="removeSize(this)">Xóa</button>
+                        </div>
+                    </div>
+                    <button type="button" onclick="addSize()">Thêm size</button>
+    
+                    <!-- Input ẩn để gửi danh sách size -->
+                    <input type="hidden" name="sizes" id="sizesData">
+    
+                    <button type="submit" >Thêm sản phẩm</button>
+                </form>
+            </div>
+        </div>
+    </main>
+    
+    <script>
+        function addSize() {
+            const container = document.getElementById("size-container");
+            const newSize = document.createElement("div");
+            newSize.classList.add("size-item");
+            newSize.innerHTML = `
+                <input type="text" placeholder="Size (S, M, L...)" class="size-input" />
+                <input type="number" placeholder="Số lượng" class="quantity-input" />
+                <button type="button" onclick="removeSize(this)">Xóa</button>
+            `;
+            container.appendChild(newSize);
+        }
+    
+        function removeSize(button) {
+            button.parentElement.remove();
+        }
+    
+        function prepareSizes() {
+            const sizes = [];
+            document.querySelectorAll(".size-item").forEach(item => {
+                const size = item.querySelector(".size-input").value;
+                const quantity = item.querySelector(".quantity-input").value;
+                if (size && quantity) {
+                    sizes.push({ size, quantity: parseInt(quantity) });
+                }
+            });
+    
+            document.getElementById("sizesData").value = JSON.stringify(sizes);
+        }
+    </script>
+    
+    
+</body>
+</html>

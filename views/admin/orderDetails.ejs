@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog - Cửa hàng</title>
+    <link rel="stylesheet" href="/css/admin/orderDetails.css">
+    <link rel="stylesheet" href="/css/headeradmin.css">
+</head>
+<body>
+    <%- include('../partialsadmin/headeradmin') %>
+
+    <main>
+        <div class="content">
+            <div class="sales-female">
+                <h1>Chi Tiết Đơn Hàng - ID: <%= order.id %></h1>
+            <h2>Thông Tin Người Dùng</h2>
+            <p><strong>Tên:</strong> <%= order.tenusers %></p>
+            <p><strong>Số Điện Thoại:</strong> <%= order.sdt %></p>
+            <p><strong>Địa Chỉ:</strong> <%= order.diachi %>, <%= order.wardId %>, <%= order.districtId %>, <%= order.provinceId %></p>
+
+            <h2>Chi Tiết Sản Phẩm</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Hình Ảnh</th>
+                        <th>Size</th>
+                        <th>Số Lượng</th>
+                        <th>Giá</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% items.forEach(item => { %>
+                        <tr>
+                            <td><img src="<%= item.image %>" alt="Sản phẩm" width="100"></td>
+                            <td><%= item.size %></td>
+                            <td><%= item.quantity %></td>
+                            <td><%= item.price %> VND</td>
+                        </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+
+            <h2>Tổng Thanh Toán</h2>
+            <p><strong>Tổng Tiền:</strong> <%= order.total_price %> VND</p>
+            <p><strong>Phương Thức Thanh Toán:</strong> <%= order.payment_method %></p>
+            <p><strong>Trạng Thái Đơn Hàng:</strong> <%= order.order_status %></p>
+            <p><strong>Ngày Đặt:</strong> <%= order.order_date %></p>
+
+            <a href="/orders1" class="btn-back">Quay lại</a>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

@@ -1,0 +1,111 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f4f4f4;
+}
+
+/* Main Container */
+main {
+    width: 60%;
+    margin-left: 26%;
+    margin-top: 100px;
+    padding: 20px;
+    background: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Content */
+.content {
+    padding: 20px;
+}
+
+/* Heading */
+h2 {
+    text-align: center;
+    color: #333;
+}
+
+/* Add Discount Button */
+.sales-female a {
+    display: inline-block;
+    margin: 15px 0;
+    padding: 10px 15px;
+    background: #007bff;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background 0.2s;
+}
+
+.sales-female a:hover {
+    background: #0056b3;
+}
+
+/* Table */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background: #fff;
+    border-radius: 5px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+table th, table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: center;
+    font-size: 14px;
+}
+
+table th {
+    background: #007bff;
+    color: white;
+}
+
+/* Action buttons */
+td a {
+    display: inline-block;
+    padding: 5px 10px;
+    margin: 2px;
+    text-decoration: none;
+    border-radius: 4px;
+    color: white;
+    font-size: 12px;
+    transition: background 0.2s;
+}
+
+td a[href*="edit"] {
+    background: #28a745;
+}
+
+td a[href*="edit"]:hover {
+    background: #218838;
+}
+
+td a[href*="delete"] {
+    background: #dc3545;
+}
+
+td a[href*="delete"]:hover {
+    background: #c82333;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    main {
+        padding: 10px;
+    }
+
+    table th, table td {
+        padding: 8px;
+        font-size: 12px;
+    }
+
+    .sales-female a {
+        display: block;
+        text-align: center;
+    }
+}

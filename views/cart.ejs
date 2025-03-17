@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giỏ hàng</title>
+    <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/css/cart.css">
+</head>
+<body>
+    <%- include('partials/header') %>
+    <main>
+        <h2>🛒 Giỏ hàng của bạn</h2>
+        <a href="/products">⬅️ Tiếp tục mua sắm</a>
+        <% if (cart.length === 0) { %>
+            <p>Giỏ hàng của bạn đang trống.</p>
+        <% } else { %>
+            <div class="cart-container">
+                <table border="1">
+                    <thead>
+                        <tr>
+                            <th>Hình ảnh</th>
+                            <th>Tên sản phẩm</th>
+                            <th>Size</th>
+                            <th>Số lượng</th>
+                            <th>Giá</th>
+                            <th>Tổng</th>
+                            <th>Hành động</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% let totalPrice = 0; %>
+                        <% cart.forEach(item => { %>
+                            <% let itemTotal = item.price * item.quantity; %>
+                            <% totalPrice += itemTotal; %>
+                            <tr>
+                                <td><img src="<%= item.image %>" alt="<%= item.name %>" width="50"></td>
+                                <td><%= item.name %></td>
+                                <td><%= item.size %></td>
+                                <td><%= item.quantity %></td>
+                                <td><%= item.price.toLocaleString() %> VND</td>
+                                <td><%= itemTotal.toLocaleString() %> VND</td>
+                                <td>
+                                    <button onclick="removeFromCart('<%= item.idSP %>', '<%= item.size %>')">❌ Xoá</button>
+                                </td>
+                            </tr>
+                        <% }); %>
+                    </tbody>
+                </table>
+            </div>
+            
+
+            <h3>💰 Tổng tiền: <span id="totalPrice"><%= totalPrice.toLocaleString() %></span> VND</h3>
+
+            <!-- Thêm phần mã giảm giá -->
+            <div>
+                <label for="discountCode">Nhập mã giảm giá:</label>
+                <input type="text" id="discountCode" placeholder="Mã giảm giá">
+                <button onclick="applyDiscount()">Áp dụng</button>
+            </div>
+
+            <!-- Chọn phương thức thanh toán -->
+            <div>
+                <h3>Chọn phương thức thanh toán:</h3>
+                <input type="radio" id="cod" name="paymentMethod" value="Chưa thanh toán" checked>
+                <label for="cod">Thanh toán khi nhận hàng</label><br>
+                <input type="radio" id="online" name="paymentMethod" value="Đã thanh toán online">
+                <label for="online">Thanh toán online</label>
+            </div>
+
+            <button onclick="clearCart()">🗑️ Xoá toàn bộ giỏ hàng</button>
+            <button onclick="checkout()">🛍️ Thanh toán</button>
+        <% } %>
+        
+    </main>
+    <script>
+        async function removeFromCart(idSP, size) {
+            await fetch('/cart/remove', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ idSP, size })
+            });
+            location.reload();
+        }
+
+        async function clearCart() {
+            await fetch('/cart/clear', { method: 'POST' });
+            location.reload();
+        }
+
+        async function applyDiscount() {
+            const discountCode = document.getElementById('discountCode').value;
+            if (!discountCode) {
+                alert("Vui lòng nhập mã giảm giá");
+                return;
+            }
+            const response = await fetch('/cart/apply-discount', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ discountCode })
+            });
+
+            const result = await response.json();
+            if (response.ok) {
+                alert(result.message);
+
+                if (result.discountedTotal) {
+                    document.getElementById('totalPrice').innerText = result.discountedTotal.toLocaleString() + ' VND';
+                }
+            } else {
+                alert(result.error);
+            }
+        }
+
+        async function checkout() {
+            const selectedPaymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
+            const response = await fetch('/cart/checkout', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ paymentMethod: selectedPaymentMethod })
+            });
+            const result = await response.json();
+
+            if (response.ok) {
+                if (result.payUrl) {
+                    window.location.href = result.payUrl;  // Chuyển đến trang thanh toán MoMo
+                } else {
+                    alert(result.message);
+                    window.location.href = '/';
+                }
+            } else {
+
+                if (result.insufficientStock) {
+                    let message = "Một số sản phẩm không đủ hàng:\n";
+                    result.insufficientStock.forEach(item => {
+                        message += `${item.name} (Size: ${item.size}) chỉ còn ${item.available} sản phẩm.\n`;
+                    });
+                    alert(message);
+                } else {
+                    alert(result.error);
+                }
+            }
+        }
+    </script>
+    <%- include('partials/footer') %>
+</body>
+</html>

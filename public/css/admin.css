@@ -1,0 +1,15 @@
+.content {
+    margin-left: 220px; /* Đảm bảo nội dung không bị chồng lên sidebar */
+    margin-top: 100px; /* Đặt phần nội dung cách phần "Xin chào" */
+    padding: 20px;
+}
+
+/* Style cho phần "Doanh số nữ" */
+.sales-female {
+    background-color: #f4f4f4;
+    padding: 20px;
+    border-radius: 8px;
+    font-size: 24px;
+    color: #333;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}

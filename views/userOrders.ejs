@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Danh sách đơn hàng</title>
+    <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/css/userOrders.css">
+</head>
+<body>
+    <%- include('partials/header') %>
+
+    <main>
+        <h1 style="text-align: center;">Danh sách đơn hàng của bạn</h1>
+        <% if (orders.length === 0) { %>
+            <p>Bạn chưa có đơn hàng nào!</p>
+        <% } else { %>
+            <div class="table-container">
+            <table border="1" cellspacing="0" cellpadding="10">
+                <thead>
+                    <tr>
+                        <th>Mã đơn hàng</th>
+                        <th>Ngày tạo</th>
+                        <th>Phương thức thanh toán</th>
+                        <th>Trạng thái</th>
+                        <th>Mã giảm giá</th>
+                        <th>Sản phẩm</th>
+                        <th>Người dùng xác nhận</th>
+                        <th>Hành động</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% orders.forEach(order => { %>
+                        <tr>
+                            <td><%= order.order_id %></td>
+                            <td><%= order.order_date %></td>
+                            <td><%= order.payment_method %></td>
+                            <td><%= order.order_status %></td>
+                            <td><%= order.discount_code || 'Không có' %></td>
+                            <td>
+                                <table border="1" cellspacing="0" cellpadding="5" style="width: 100%;">
+                                    <thead>
+                                        <tr>
+                                            <th>Hình ảnh</th>
+                                            <th>Tên sản phẩm</th>
+                                            <th>Size</th>
+                                            <th>Số lượng</th>
+                                            <th>Giá</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <% order.items.forEach(item => { %>
+                                            <tr>
+                                                <td><img src="<%= item.image %>" alt="<%= item.name %>" width="50"></td>
+                                                <td><%= item.name %></td>
+                                                <td><%= item.size %></td>
+                                                <td><%= item.quantity %></td>
+                                                <td><%= item.price %> VND</td>
+                                            </tr>
+                                        <% }) %>
+                                    </tbody>
+                                </table>
+                            </td>
+                            <td id="confirmation-<%= order.order_id %>">
+                                <select id="select-confirmation-<%= order.order_id %>">
+                                    <option value="Đang chờ" <%= order.user_confirmation === 'Đang chờ' ? 'selected' : '' %>>Đang chờ</option>
+                                    <option value="Chưa nhận" <%= order.user_confirmation === 'Chưa nhận' ? 'selected' : '' %>>Chưa nhận</option>
+                                    <option value="Đã nhận" <%= order.user_confirmation === 'Đã nhận' ? 'selected' : '' %>>Đã nhận</option>
+                                </select>
+                            </td>
+                            <td>
+                                <button onclick="updateConfirmation('<%= order.order_id %>')">Cập nhật</button>
+                            </td>
+                        </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+        </div>
+        <% } %>
+    </main>
+
+    <script>
+        function updateConfirmation(orderId) {
+            const selectedValue = document.getElementById(`select-confirmation-${orderId}`).value;
+    
+            fetch('/orders/update-confirmation', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ orderId, userConfirmation: selectedValue })
+            })
+            .then(response => {
+                if (!response.ok) throw new Error('Cập nhật thất bại');
+                return response.text();
+            })
+            .then(() => {
+                alert('Cập nhật thành công!');
+                window.location.reload(); // Load lại trang sau khi cập nhật thành công
+            })
+            .catch(error => alert(error.message));
+        }
+    </script>
+    
+
+    <%- include('partials/footer') %>
+</body>
+</html>

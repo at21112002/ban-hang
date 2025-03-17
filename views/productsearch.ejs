@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sản phẩm - Cửa hàng</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/product.css">
+</head>
+<body>
+    <!-- Include header -->
+    <%- include('partials/header') %>
+
+    <main>
+        <h1>Kết quả tìm kiếm cho: "<%= searchQuery %>"</h1>
+
+        <% if (products.length === 0) { %>
+        <p>Không tìm thấy sản phẩm nào.</p>
+        <% } else { %>
+        <div class="product-list">
+            <% products.forEach(product => { %>
+            <div class="product-item">
+                <img src="<%= product.image %>" alt="<%= product.name %>">
+                <h3><%= product.name %></h3>
+                <p>Giá: <%= product.price %> VND</p>
+                <a href="/product/<%= product.idSP %>">Xem chi tiết</a>
+            </div>
+            <% }) %>
+        </div>
+        <% } %>
+        <% if (relatedProducts.length > 0) { %>
+            
+            <div class="product-list">
+              <% relatedProducts.forEach(product => { %>
+                <div class="product-item">
+                  <img src="<%= product.image %>" alt="<%= product.name %>">
+                  <h3><%= product.name %></h3>
+                  <p>Giá: <%= product.price %> VND</p>
+                  <a href="/product/<%= product.idSP %>">Xem chi tiết</a>
+                </div>
+              <% }) %>
+            </div>
+          <% } %>
+
+
+    </main>
+    
+    
+    
+
+    <!-- Include footer -->
+    <%- include('partials/footer') %>
+</body>
+</html>

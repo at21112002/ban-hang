@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/register.css">
+    <link rel="stylesheet" href="/css/header.css">
+    <script src="https://esgoo.net/scripts/jquery.js"></script>
+    <style type="text/css">
+        .css_select_div { text-align: center; }
+        .css_select { display: inline-table; width: 25%; padding: 5px; margin: 5px 2%; border: solid 1px #686868; border-radius: 5px; }
+    </style>
+    <title>Đăng ký</title>
+    <script>
+        $(document).ready(function() {
+            // Lấy danh sách tỉnh
+            $.getJSON('https://esgoo.net/api-tinhthanh/1/0.htm', function(data_tinh) {
+                if(data_tinh.error === 0) {
+                    $.each(data_tinh.data, function (key_tinh, val_tinh) {
+                        $("#provinceId").append('<option value="'+val_tinh.id+'">'+val_tinh.full_name+'</option>');
+                    });
+
+                    // Khi chọn tỉnh, lấy danh sách huyện
+                    $("#provinceId").change(function() {
+                        var idtinh = $(this).val();
+                        $.getJSON('https://esgoo.net/api-tinhthanh/2/'+idtinh+'.htm', function(data_quan) {
+                            if (data_quan.error === 0) {
+                                $("#districtId").html('<option value="0">Quận Huyện</option>');
+                                $("#wardId").html('<option value="0">Phường Xã</option>');
+                                $.each(data_quan.data, function(key_quan, val_quan) {
+                                    $("#districtId").append('<option value="'+val_quan.id+'">'+val_quan.full_name+'</option>');
+                                });
+
+                                // Khi chọn huyện, lấy danh sách xã
+                                $("#districtId").change(function() {
+                                    var idquan = $(this).val();
+                                    $.getJSON('https://esgoo.net/api-tinhthanh/3/'+idquan+'.htm', function(data_phuong) {
+                                        if (data_phuong.error === 0) {
+                                            $("#wardId").html('<option value="0">Phường Xã</option>');
+                                            $.each(data_phuong.data, function(key_phuong, val_phuong) {
+                                                $("#wardId").append('<option value="'+val_phuong.id+'">'+val_phuong.full_name+'</option>');
+                                            });
+                                        }
+                                    });
+                                });
+                            }
+                        });
+                    });
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+    <%- include('partials/header') %>
+
+    <main>
+        <h1>Đăng ký người dùng</h1>
+        <form action="/register" method="POST" class="register-form">
+            
+            <div class="div">
+                <div class="div1">
+                    <label for="tenusers">Tên người dùng:</label>
+                <input type="text" name="tenusers" id="tenusers" required>
+    
+                <label for="email">Email:</label>
+                <input type="email" name="email" id="email" required>
+    
+                <label for="sdt">Số điện thoại:</label>
+                <input type="text" name="sdt" id="sdt" required>
+    
+                <label for="diachi">Địa chỉ:</label>
+                <textarea name="diachi" id="diachi" required></textarea>
+    
+                <label for="ngaysinh">Ngày sinh:</label>
+                <input type="date" name="ngaysinh" id="ngaysinh" required>
+                </div>
+    
+                <div class="div1">
+                    <label for="provinceId">Tỉnh:</label>
+                <select name="provinceId" id="provinceId"  required>
+                    <option value="0">Chọn tỉnh</option>
+                </select>
+    
+                <label for="districtId">Huyện:</label>
+                <select name="districtId" id="districtId"  required>
+                    <option value="0">Chọn huyện</option>
+                </select>
+    
+                <label for="wardId">Xã:</label>
+                <select name="wardId" id="wardId"  required>
+                    <option value="0">Chọn xã</option>
+                </select>
+    
+                <label for="password">Mật khẩu:</label>
+                <input type="password" name="password" id="password" required>
+    
+                <label for="quyen">Quyền:</label>
+                <select name="quyen" id="quyen">
+                    <option value="user">Người dùng</option>
+                    <option value="admin">Quản trị viên</option>
+                </select>
+                </div>
+            </div>
+
+            <button type="submit">Đăng ký</button>
+        </form>
+    </main>
+
+    <%- include('partials/footer') %>
+</body>
+</html>

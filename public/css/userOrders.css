@@ -1,0 +1,89 @@
+main {
+    width: 90%;
+    margin: auto;
+    padding: 20px;
+    background: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    font-family: Arial, sans-serif;
+    overflow: hidden;
+}
+
+/* Bọc bảng trong một khung cuộn */
+.table-container {
+    max-height: 500px;
+    overflow-y: auto;
+    scrollbar-width: none; /* Ẩn thanh cuộn trên Firefox */
+    -ms-overflow-style: none; /* Ẩn thanh cuộn trên IE/Edge */
+}
+
+/* Ẩn thanh cuộn trên Chrome, Safari */
+.table-container::-webkit-scrollbar {
+    display: none;
+}
+
+/* Bảng chính */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Phần đầu bảng */
+thead {
+    background: #000;
+    color: #fff;
+}
+
+/* Ô trong bảng */
+th, td {
+    padding: 12px;
+    border: 1px solid #ddd;
+    text-align: center;
+    vertical-align: middle;
+}
+
+/* Ảnh sản phẩm */
+img {
+    max-width: 50px;
+    height: auto;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* Bảng sản phẩm con */
+table table {
+    margin: 10px auto;
+    width: 90%;
+    box-shadow: none;
+}
+
+/* Nút cập nhật */
+button {
+    background: #000;
+    color: #fff;
+    border: none;
+    padding: 8px 12px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background 0.2s;
+}
+
+button:hover {
+    background: #444;
+}
+
+/* Select box */
+select {
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* Phần thông báo khi không có đơn hàng */
+p {
+    text-align: center;
+    color: #555;
+}

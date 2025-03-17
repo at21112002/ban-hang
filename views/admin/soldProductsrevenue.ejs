@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog - Cửa hàng</title>
+    <link rel="stylesheet" href="/css/admin/revenue.css">
+    <link rel="stylesheet" href="/css/headeradmin.css">
+</head>
+<body>
+    <%- include('../partialsadmin/headeradmin') %>
+
+    <main>
+        <div class="content">
+            <div class="sales-female">
+                <h1>Sản Phẩm Đã Bán</h1>
+                <br>
+                <form action="/admin/sold-products" method="GET">
+                    <label for="startDate">Từ ngày:</label>
+                    <input type="date" id="startDate" name="startDate">
+                    <label for="endDate">Đến ngày:</label>
+                    <input type="date" id="endDate" name="endDate">
+                    <button type="submit">Lọc Sản Phẩm</button>
+                </form>
+                <br>
+                <% if (soldProducts && soldProducts.length > 0) { %>
+                    <table border="1">
+                        <thead>
+                            <tr>
+                                <th>STT</th>
+                                <th>Tên sản phẩm</th>
+                                <th>Tổng số lượng bán</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% soldProducts.forEach((product, index) => { %>
+                                <tr>
+                                    <td><%= index + 1 %></td>
+                                    <td><%= product.name %></td>
+                                    <td><%= product.totalSold %></td>
+                                </tr>
+                            <% }) %>
+                        </tbody>
+                    </table>
+                <% } else { %>
+                    <p>Không có sản phẩm nào được bán trong khoảng thời gian này.</p>
+                <% } %>
+            </div>
+        </div>
+    </main>
+
+</body>
+</html>

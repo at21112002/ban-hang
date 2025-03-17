@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog - Cửa hàng</title>
+    <link rel="stylesheet" href="/css/admin/discountsadmin.css">
+    <link rel="stylesheet" href="/css/headeradmin.css">
+</head>
+<body>
+    <%- include('../partialsadmin/headeradmin') %>
+
+    <main>
+        <div class="content">
+            <div class="sales-female">
+                <h2>Quản lý Mã Giảm Giá</h2>
+                <a href="/admin/addDiscount">Thêm Mã Giảm Giá</a>
+                <table border="1">
+                    <tr>
+                        <th>ID</th>
+                        <th>Mã</th>
+                        <th>Giảm giá (%)</th>
+                        <th>Ngày hết hạn</th>
+                        <th>Số lượng</th>
+                        <th>Hành động</th>
+                    </tr>
+                    <% discounts.forEach(discount => { %>
+                        <tr>
+                            <td><%= discount.id %></td>
+                            <td><%= discount.code %></td>
+                            <td><%= discount.discount_percentage %>%</td>
+                            <td><%= discount.expiration_date %></td>
+                            <td><%= discount.quantitydiscount %></td>
+                            <td>
+                                <a href="/admin/editDiscount/edit/<%= discount.id %>">Sửa</a>
+                                <a href="/admin/discountsadmin/delete/<%= discount.id %>" onclick="return confirm('Xóa mã này?')">Xóa</a>
+                            </td>
+                        </tr>
+                    <% }) %>
+                </table>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng nhập</title>
+    <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/css/userDetails.css">
+</head>
+<body>
+    <%- include('partials/header') %>
+
+    <main>
+        <h1>Thông Tin Chi Tiết Người Dùng</h1>
+        <p><strong>Tên:</strong> <%= user.tenusers %></p>
+        <p><strong>Email:</strong> <%= user.email %></p>
+        <p><strong>Số điện thoại:</strong> <%= user.sdt %></p>
+        <p><strong>Địa chỉ:</strong> <%= user.diachi %></p>
+        <p><strong>Ngày sinh:</strong> 
+            <%= new Date(user.ngaysinh).toLocaleDateString('vi-VN') %>
+        </p>        
+        <p><strong>Tỉnh/Thành phố ID:</strong> <%= user.provinceId %></p>
+        <p><strong>Quận/Huyện ID:</strong> <%= user.districtId %></p>
+        <p><strong>Phường/Xã ID:</strong> <%= user.wardId %></p>
+        <p><strong>Ngày tạo tài khoản:</strong> <%= user.created_at %></p>
+        <a href="/change-password">
+            <button class="user-action-btn">Thay đổi mật khẩu</button>
+        </a>
+        <a href="/orders">
+            <button class="user-action-btn">Xem lịch sử đơn hàng</button>
+        </a>
+
+        
+    </main>
+
+    <%- include('partials/footer') %>
+</body>
+</html>

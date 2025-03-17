@@ -1,0 +1,100 @@
+/* Reset một số kiểu mặc định */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    height: 100vh;
+    flex-direction: column; /* Sắp xếp các phần tử theo chiều dọc */
+}
+
+/* Style cho sidebar (thanh điều hướng) */
+.sidebar {
+    width: 200px;
+    background-color: #333;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    padding-top: 20px;
+}
+
+/* Style cho các item trong danh sách */
+.sidebar ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.sidebar ul li {
+    margin: 20px 0;
+}
+
+.sidebar ul li a {
+    color: white;
+    text-decoration: none;
+    display: block;
+    padding: 10px;
+    font-size: 18px;
+}
+
+.sidebar ul li a:hover {
+    background-color: #555;
+}
+
+/* Style cho phần hiển thị "Xin chào, User" ở góc phải trên */
+.welcome-message {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 18px;
+    cursor: pointer;
+    
+}
+
+/* Nút đăng xuất */
+.logout-btn {
+    display: none;
+    width: 115px;
+    height: 40px;
+    position: absolute;
+    top: 40px; /* Đặt nút đăng xuất dưới "Xin chào, User" */
+    right: 0;
+    background-color: #f44336;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.welcome-message:hover .logout-btn {
+    display: block; /* Hiển thị nút khi hover vào "Xin chào, User" */
+}
+
+/* Nút đăng xuất (liên kết) */
+.logout-btn a {
+    color: white;
+    text-decoration: none;
+}
+
+/* Phần nội dung "Doanh số nữ" trong nền */
+
+    #pagination {
+        margin-top: 15px;
+    }
+    #pagination button {
+        margin: 5px;
+        padding: 5px 10px;
+        cursor: pointer;
+    }
+    #pagination button.active {
+        background-color: blue;
+        color: white;
+    }
+
