@@ -1,12 +1,13 @@
-// models/db.js
+require('dotenv').config();
 const mysql = require('mysql2');
 
-// Cấu hình kết nối với MySQL
+// Cấu hình kết nối với MySQL từ biến môi trường
 const connection = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',      // Username mặc định trong XAMPP
-  password: '',      // Mật khẩu mặc định trong XAMPP (thường là rỗng)
-  database: 'myshop1' // Tên cơ sở dữ liệu bạn muốn kết nối
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
+  port: process.env.DB_PORT
 });
 
 // Kết nối đến cơ sở dữ liệu
